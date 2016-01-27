@@ -3,7 +3,6 @@
 class BinaryTree {
 	constructor() {	
 		this.root = null;
-
 	}
 
 	insert(data) {
@@ -107,7 +106,7 @@ class BinaryTree {
 		}
 
 		else{
-			successor = this.getSuccessor(this.current,isLeft);
+			var successor = this.getSuccessor(current,isLeft);
 
 			if (current == this.root){
 				this.root = successor;
@@ -127,21 +126,29 @@ class BinaryTree {
 	size() {
 		var number = 0;
 		if(this.root != null){
-			number += this.mySize(this.root,number+1);			
-	    }
+			return this.mySize(this.root);			
+	    }	
 		return number;
 	}
 	
-	mySize(data,number){
+	mySize(data){
+		if (data.left == null && data.right == null){
+			return 1;
+		}
+		var tempLeft, tempRight;
 		if(data.left != null){
-			number++;
-			return this.mySize(data.left,number);
+			 tempLeft = this.mySize(data.left);
+		}
+		else{
+			tempLeft = 0;
 		}
 		if(data.right != null){
-			number++;
-			return this.mySize(data.right,number);
+			 tempRight = this.mySize(data.right);
 		}
-		return number;	
+		else{
+			tempRight = 0;
+		}
+		return tempLeft + tempRight + 1;
 	}
 
 	isEmpty() {
