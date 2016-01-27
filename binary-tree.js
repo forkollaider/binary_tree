@@ -106,7 +106,7 @@ class BinaryTree {
 		}
 
 		else{
-			var successor = this.getSuccessor(current,isLeft);
+			var successor = this.getSuccessor(current);
 
 			if (current == this.root){
 				this.root = successor;
@@ -160,7 +160,7 @@ class BinaryTree {
 		}
 	}
 
-	getSuccessor(toRemove,isLeft){
+	getSuccessor(toRemove){
 		var successorParent = toRemove;
 		var successor = toRemove;
 		var current = toRemove.right;
