@@ -7,27 +7,27 @@ class BinaryTree {
 	}
 
 	insert(data) {
-		this.newNode = new Node();
-		this.newNode.data = data;
+		var newNode = new Node();
+		newNode.data = data;
 		if(this.root == null){
-			this.root = this.newNode;
+			this.root = newNode;
 		}
 		else{
-			this.current = this.root;
-			this.parent = null;
+			var current = this.root;
+			var parent = null;
 			while(true){
-				this.parent = this.current;
-				if(data < this.current.data){
-					this.current = this.current.left;
-					if(this.current == null){
-						this.parent.left = this.newNode;
+				parent = current;
+				if(data < current.data){
+					current = current.left;
+					if(current == null){
+						parent.left = newNode;
 						return;
 					} 
 				}
 				else{
-					this.current = this.current.right;
-					if(this.current == null){
-						this.parent.right = this.newNode;
+					current = current.right;
+					if(current == null){
+						parent.right = newNode;
 						return;
 					}
 				}
@@ -36,15 +36,15 @@ class BinaryTree {
 	}
 
 	contains(data) {
-		this.current = this.root;
-		while(this.current.data != data){
-			if (data < this.current.data){
-				this.current = this.current.left;
+		var current = this.root;
+		while(current.data != data){
+			if (data < current.data){
+				current = current.left;
 			}
 			else{
-				this.current = this.current.right;
+				current = current.right;
 			}
-			if(this.current == null){
+			if(current == null){
 				return false;
 			}
 		}
@@ -52,69 +52,96 @@ class BinaryTree {
 	}
 
 	remove(data) {
-		this.current = this.root;
-		this.parent = this.root;
-		this.isLeft = true;
-		while(this.current.data != data){
-			this.parent = this.current;
-			if(data < this.current.data){
-				this.isLeft = true;
-				this.current = this.current.left;
+		var current = this.root;
+		var parent = this.root;
+		var isLeft = true;
+		while(current.data != data){
+			parent = current;
+			if(data < current.data){
+				isLeft = true;
+				current = current.left;
 			}
 			else{
-				this.isLeft = false;
-				this.current = this.current.right;
+				isLeft = false;
+				current = current.right;
 			}
-			if(this.current == null){
-				return false;
+			if(current == null){
+				return;
 			}
 		}
 
-		if(this.current.left == null && this.current.right == null){
-			if(this.current == this.root){
+		if(current.left == null && current.right == null){
+			if(current == this.root){
 				this.root=null;
 			}
-			else if(this.isLeft){
-				this.parent.left = null;
+			else if(isLeft){
+				parent.left = null;
 			}
 			else{
-				this.parent.right = null;
+				parent.right = null;
 			}
 		}
 
-		else if(this.current.right == null){
-			if(this.current == this.root){
-				this.root = this.current.left;
+		else if(current.right == null){
+			if(current == this.root){
+				this.root = current.left;
 			}
-			else if(this.isLeft){
-				this.parent.left = this.current.left;
+			else if(isLeft){
+				parent.left = current.left;
 			}
 			else{
-				this.parent.right = this.current.left;
+				parent.right = current.left;
 			}
 		}
 
 		else if(current.left == null){
-			if(this.current == this.root){
-				this.root = this.current.right;
+			if(current == this.root){
+				this.root = current.right;
 			}
-			else if(this.isLeft){
-				this.parent.left = this.current.right;
+			else if(isLeft){
+				parent.left = current.right;
 			}
 			else{
-				this.parent.right = this.current.right;
+				parent.right = current.right;
 			}
 		}
 
 		else{
+			successor = this.getSuccessor(this.current,isLeft);
 
+			if (current == this.root){
+				this.root = successor;
+			}
+			else if(isLeft){
+				parent.left = successor;
+			}
+			else{
+				successor.left = parent.right.left;
+				parent.right = successor;
+			}
 		}
 
-
+		return true;
 	}
 
 	size() {
-
+		var number = 0;
+		if(this.root != null){
+			number += this.mySize(this.root,number+1);			
+	    }
+		return number;
+	}
+	
+	mySize(data,number){
+		if(data.left != null){
+			number++;
+			return this.mySize(data.left,number);
+		}
+		if(data.right != null){
+			number++;
+			return this.mySize(data.right,number);
+		}
+		return number;	
 	}
 
 	isEmpty() {
@@ -126,12 +153,20 @@ class BinaryTree {
 		}
 	}
 
-	getSuccessor(toRemove){
-		this.successorParent = toRemove;
-		this.successor = toRemove;
-		this.current = toRemove.right;
-		while(this.current != null){
-			this.successorParent 
+	getSuccessor(toRemove,isLeft){
+		var successorParent = toRemove;
+		var successor = toRemove;
+		var current = toRemove.right;
+		while(current != null){
+			successorParent = successor;
+			successor = current;
+			current = current.left; 
 		}
-	}
+
+		if(successor != toRemove.right){
+			successorParent.left = successor.right;
+			successor.right = toRemove.right;
+		}
+		return successor;
+	}	
 }
