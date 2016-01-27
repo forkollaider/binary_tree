@@ -132,10 +132,10 @@ class BinaryTree {
 	}
 	
 	mySize(data){
+		var tempLeft, tempRight;
 		if (data.left == null && data.right == null){
 			return 1;
 		}
-		var tempLeft, tempRight;
 		if(data.left != null){
 			 tempLeft = this.mySize(data.left);
 		}
@@ -143,7 +143,7 @@ class BinaryTree {
 			tempLeft = 0;
 		}
 		if(data.right != null){
-			 tempRight = this.mySize(data.right);
+			tempRight = this.mySize(data.right);
 		}
 		else{
 			tempRight = 0;
